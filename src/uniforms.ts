@@ -10,10 +10,12 @@ export class Uniforms {
   }
 
   buffer(): Float32Array {
+    // must be multiple of 16 bytes
     return new Float32Array([
       this.width,
       this.height,
-      this.time
+      this.time,
+      0
     ]);
   }
 }

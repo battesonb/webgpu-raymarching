@@ -2,10 +2,6 @@ struct VertexInput {
   @location(0) pos: vec2f,
 };
 
-struct VertexOutput {
-  @builtin(position) clip_pos: vec4f,
-};
-
 struct Uniforms {
   dimensions: vec2f,
   time: f32,
@@ -14,13 +10,17 @@ struct Uniforms {
 @group(0) @binding(0) var<uniform> uniforms: Uniforms;
 
 @vertex
-fn vertexMain(in: VertexInput) -> VertexOutput {
-  var output: VertexOutput;
-  output.clip_pos = vec4f(in.pos, 0, 1);
-  return output;
+fn vertexMain(in: VertexInput) -> @builtin(position) vec4f {
+  return vec4f(in.pos, 0, 1);
 }
 
 @fragment
-fn fragmentMain(in: VertexOutput) -> @location(0) vec4f {
-  return vec4(1, 0, 0, 1);
+fn fragmentMain(@builtin(position) framebuffer_position: vec4f) -> @location(0) vec4f {
+  let p = framebuffer_position.xy / uniforms.dimensions;
+  let q = p - vec2(0.5, 0.5);
+  let d = length(q);
+  let r = 0.5;
+  let color = step(r * r, d);
+
+  return vec4(color, 0, 0, 1);
 }
