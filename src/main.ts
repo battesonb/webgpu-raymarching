@@ -113,7 +113,7 @@ const vertexBuffer = device.createBuffer({
 device.queue.writeBuffer(vertexBuffer, 0, vertexArray);
 
 function render() {
-  uniforms.time = performance.now();
+  uniforms.time = performance.now() / 1000;
   const uniformsArray = uniforms.buffer();
   device.queue.writeBuffer(uniformsBuffer, 0, uniformsArray);
 
